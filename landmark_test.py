@@ -8,8 +8,35 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_face_mesh = mp.solutions.face_mesh
 
-IMAGE_FILES = glob.glob('./imageSet/training_set/Heart/*.jpg') # 처리 할 input 이미지
-SAVE_DIR ='./imageSet/processed_set/Heart/' # 처리 된 이미지 저장 경로
+# 처리 할 input 이미지
+#IMAGE_FILES = glob.glob('./imageSet/training_set/Heart/*.jpg')
+#IMAGE_FILES = glob.glob('./imageSet/training_set/Oblong/*.jpg')
+#IMAGE_FILES = glob.glob('./imageSet/training_set/Oval/*.jpg')
+#IMAGE_FILES = glob.glob('./imageSet/training_set/Round/*.jpg')
+#IMAGE_FILES = glob.glob('./imageSet/training_set/Square/*.jpg')
+
+# test용
+#IMAGE_FILES = glob.glob('./imageSet/testing_set/Heart/*.jpg')
+#IMAGE_FILES = glob.glob('./imageSet/testing_set/Oblong/*.jpg')
+#IMAGE_FILES = glob.glob('./imageSet/testing_set/Oval/*.jpg')
+IMAGE_FILES = glob.glob('./imageSet/testing_set/Round/*.jpg')
+#IMAGE_FILES = glob.glob('./imageSet/testing_set/Square/*.jpg')
+
+
+# 처리 된 이미지 저장 경로
+#SAVE_DIR ='./imageSet/processed_set/Heart/'
+#SAVE_DIR ='./imageSet/processed_set/Oblong/'
+#SAVE_DIR ='./imageSet/processed_set/Oval/'
+#SAVE_DIR ='./imageSet/processed_set/Round/'
+#SAVE_DIR ='./imageSet/processed_set/Square/'
+
+
+#SAVE_DIR ='./imageSet/processed_testing_set/Heart/'
+#SAVE_DIR ='./imageSet/processed_testing_set/Oblong/'
+#SAVE_DIR = './imageSet/processed_testing_set/Oval/'
+SAVE_DIR ='./imageSet/processed_testing_set/Round/'
+# SAVE_DIR ='./imageSet/processed_testing_set/Square/'
+
 
 #IMAGE_FILES = ["./imageSet/training_set/Heart/heart (1).jpg"]
 
