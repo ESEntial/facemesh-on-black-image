@@ -6,7 +6,7 @@ mp_drawing_styles = mp.solutions.drawing_styles
 mp_face_mesh = mp.solutions.face_mesh
 
 # 이미지 파일의 경우을 사용하세요.:
-IMAGE_FILES = ["./imageSet/heart/heart (1).jpg"]
+IMAGE_FILES = ["./imageSet/training_set/Heart/heart (6).jpg"]
 
 # 표현되는 랜드마크의 굵기와 반경
 drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=2)
@@ -58,7 +58,8 @@ with mp_face_mesh.FaceMesh(
         # 이미지에 출력하고 그 위에 얼굴 그물망 경계점을 그립니다.
         if not results.multi_face_landmarks:
             continue
-        annotated_image = image.copy()
+        #annotated_image = image.copy()
+        annotated_image = np.zeros((500, 600, 3), np.uint8)
         ih, iw, ic = annotated_image.shape
         for face_landmarks in results.multi_face_landmarks:
 
