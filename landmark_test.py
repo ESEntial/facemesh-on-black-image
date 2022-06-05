@@ -1,3 +1,6 @@
+import glob
+import os
+
 import cv2
 import mediapipe as mp
 import numpy as np
@@ -5,7 +8,12 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_face_mesh = mp.solutions.face_mesh
 
+
+SAVE_DIR ='./imageSet/processed_set/Heart/'
+
 # 이미지 파일의 경우을 사용하세요.:
+#originImageFiles = glob.glob('./imageSet/training_set/Heart/')
+#IMAGE_FILES = originImageFiles
 IMAGE_FILES = ["./imageSet/training_set/Heart/heart (6).jpg"]
 
 # 표현되는 랜드마크의 굵기와 반경
@@ -116,8 +124,8 @@ with mp_face_mesh.FaceMesh(
         coodinate_list = coodinate_list.reshape((3, -1))
         #print(coodinate_list)
 
-        cv2.imshow("Image_ESEntial",annotated_image)
-       
+        # cv2.imshow("Image_ESEntial",annotated_image)
+        cv2.imwrite('./imageSet/processed_set/Heart/heart (6).jpg', annotated_image)
         # esc 입력시 종료
         key = cv2.waitKey(50000)
         if key == 27:
