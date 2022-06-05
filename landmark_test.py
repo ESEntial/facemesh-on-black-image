@@ -8,38 +8,6 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_face_mesh = mp.solutions.face_mesh
 
-# 처리 할 input 이미지
-#IMAGE_FILES = glob.glob('./imageSet/training_set/Heart/*.jpg')
-#IMAGE_FILES = glob.glob('./imageSet/training_set/Oblong/*.jpg')
-#IMAGE_FILES = glob.glob('./imageSet/training_set/Oval/*.jpg')
-#IMAGE_FILES = glob.glob('./imageSet/training_set/Round/*.jpg')
-#IMAGE_FILES = glob.glob('./imageSet/training_set/Square/*.jpg')
-
-# test용
-#IMAGE_FILES = glob.glob('./imageSet/testing_set/Heart/*.jpg')
-#IMAGE_FILES = glob.glob('./imageSet/testing_set/Oblong/*.jpg')
-#IMAGE_FILES = glob.glob('./imageSet/testing_set/Oval/*.jpg')
-IMAGE_FILES = glob.glob('./imageSet/testing_set/Round/*.jpg')
-#IMAGE_FILES = glob.glob('./imageSet/testing_set/Square/*.jpg')
-
-
-# 처리 된 이미지 저장 경로
-#SAVE_DIR ='./imageSet/processed_set/Heart/'
-#SAVE_DIR ='./imageSet/processed_set/Oblong/'
-#SAVE_DIR ='./imageSet/processed_set/Oval/'
-#SAVE_DIR ='./imageSet/processed_set/Round/'
-#SAVE_DIR ='./imageSet/processed_set/Square/'
-
-
-#SAVE_DIR ='./imageSet/processed_testing_set/Heart/'
-#SAVE_DIR ='./imageSet/processed_testing_set/Oblong/'
-#SAVE_DIR = './imageSet/processed_testing_set/Oval/'
-SAVE_DIR ='./imageSet/processed_testing_set/Round/'
-# SAVE_DIR ='./imageSet/processed_testing_set/Square/'
-
-
-#IMAGE_FILES = ["./imageSet/training_set/Heart/heart (1).jpg"]
-
 labels = [ 'Heart', 'Oblong', 'Oval', 'Round', 'Square' ]
 setTypes = [ 'testing', 'training' ]
 for setType in setTypes:
@@ -78,7 +46,7 @@ for setType in setTypes:
                 refine_landmarks=True,
                 min_detection_confidence=0.5) as face_mesh:
             for idx, file in enumerate(IMAGE_FILES):
-                currentFileName = str(file.title()).split('\\')[1]
+                currentFileName = os.path.basename(file)
 
                 # 얼굴부분 crop
                 # haarcascade 불러오기
@@ -114,61 +82,10 @@ for setType in setTypes:
                         landmark_list=face_landmarks,
                         connections=mp_face_mesh.FACEMESH_CONTOURS,
                         landmark_drawing_spec=drawing_spec)
-                        # connection_drawing_spec=mp_drawing_styles     <---- 이 부분, 눈썹과 눈, 오른쪽 왼쪽 색깔(초록색, 빨강색)
-                        # .get_default_face_mesh_contours_style())
 
-            # 랜드마크의 좌표 정보 확인
-            #  for i, idx in enumerate(oval) :
-            #          if idx == 109 :
-            #                  x_gap = face_landmarks.landmark[oval[i]].x - face_landmarks.landmark[oval[0]].x
-            #                  y_gap = face_landmarks.landmark[oval[i]].y - face_landmarks.landmark[oval[0]].y
-            #                  A = np.array([[y_gap/x_gap, -1], [-x_gap/y_gap, -1]])
-            #                  B = np.array([y_gap/x_gap*face_landmarks.landmark[oval[i]].x-face_landmarks.landmark[oval[i]].y, x_gap/y_gap*face_landmarks.landmark[5].x-face_landmarks.landmark[5].y])
-            #                  x,y = np.linalg.solve(A,B)
-            #          else :
-            #                  x_gap = face_landmarks.landmark[oval[i]].x - face_landmarks.landmark[oval[i+1]].x
-            #                  y_gap = face_landmarks.landmark[oval[i]].y - face_landmarks.landmark[oval[i+1]].y
-            #                  A = np.array([[y_gap/x_gap, -1], [-x_gap/y_gap, -1]])
-            #                  B = np.array([y_gap/x_gap*face_landmarks.landmark[oval[i]].x-face_landmarks.landmark[oval[i]].y, x_gap/y_gap*face_landmarks.landmark[5].x-face_landmarks.landmark[5].y])
-            #                  x,y = np.linalg.solve(A,B)
-            #          print(idx," : ",x, y)
-
-
-                # for id, lm in enumerate(face_landmarks.landmark):
-                #         ih, iw, ic = annotated_image.shape
-                #         x,y = int(lm.x*iw),int(lm.y*ih)
-                #         # print(id,x,y)
-                #         print(face_landmarks.landmark[id].x, face_landmarks.landmark[id].y, face_landmarks.landmark[id].z)
-                #
-                #         # if id == 201 :
-                #         #         cv2.putText(annotated_image,str(id),(x,y),cv2.FONT_HERSHEY_PLAIN,0.5,(0,255,0),1)
-                #         # else :
-                #         #         cv2.putText(annotated_image,str(id),(x,y),cv2.FONT_HERSHEY_PLAIN,0.5,(0,0,0),1)
-                #         # if id == 94 :
-                #         #         cv2.putText(annotated_image,str(id),(x,y),cv2.FONT_HERSHEY_PLAIN,0.5,(0,255,0),1)
-                #         # if id == 46 :
-                #         #         cv2.putText(annotated_image,str(id),(x,y),cv2.FONT_HERSHEY_PLAIN,0.5,(0,255,0),1)
-                #         # if id == 276 :
-                #         #         cv2.putText(annotated_image,str(id),(x,y),cv2.FONT_HERSHEY_PLAIN,0.5,(0,255,0),1)
-                #
-
-                # coodinate_list = np.array([x_list, y_list, z_list])
-                # #print(coodinate_list)
-                #
-                # coodinate_list = coodinate_list.reshape((1, -1))
-                # #print(coodinate_list)
-                #
-                # coodinate_list = coodinate_list.reshape((3, -1))
-                #print(coodinate_list)
-
-                # cv2.imshow("Image_ESEntial",annotated_image)
                 if cv2.imwrite(SAVE_DIR+ currentFileName, annotated_image) == True:
                     print("successfully saved image!!" + currentFileName)
                 else : print("ERROR!!" + currentFileName)
                 
-                # esc 입력시 종료
-                # key = cv2.waitKey(50000)
-                # if key == 27:
-                #     break
         print("Done "+label)
     print("Done "+setType)

@@ -10,9 +10,9 @@ mp_face_mesh = mp.solutions.face_mesh
 
 labels = [ 'Heart', 'Oblong', 'Oval', 'Round', 'Square' ]
 setTypes = [ 'testing', 'training' ]
-labelIdx = 4
+labelIdx = 1
 typeIdx = 1
-imageNum = 0
+imageNum = 724
 
 imageName = labels[labelIdx].lower()+' ('+str(imageNum)+').jpg'
 print(imageName)
