@@ -8,13 +8,11 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_face_mesh = mp.solutions.face_mesh
 
-#IMAGE_FILES = glob.glob('./imageSet/training_set/Heart/*.jpg') # 처리 할 input 이미지
-#SAVE_DIR ='./imageSet/processed_set/Heart/' # 처리 된 이미지 저장 경로
+IMAGE_FILES = glob.glob('./imageSet/training_set/Heart/*.jpg') # 처리 할 input 이미지
+SAVE_DIR ='./imageSet/processed_set/Heart/' # 처리 된 이미지 저장 경로
 
+#IMAGE_FILES = ["./imageSet/training_set/Heart/heart (1).jpg"]
 
-#originImageFiles = glob.glob('./imageSet/training_set/Heart/')
-#IMAGE_FILES = originImageFiles
-IMAGE_FILES = ["./imageSet/training_set/Heart/heart (10).jpg"]
 
 # 표현되는 랜드마크의 굵기와 반경
 drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=2)
@@ -37,13 +35,16 @@ x_list = np.linspace(0, 0, len(face_whole))
 y_list = np.linspace(0, 0, len(face_whole))
 z_list = np.linspace(0, 0, len(face_whole))
 
+
 with mp_face_mesh.FaceMesh(
         static_image_mode=True,
         max_num_faces=1,
         refine_landmarks=True,
         min_detection_confidence=0.5) as face_mesh:
     for idx, file in enumerate(IMAGE_FILES):
-        # 얼굴부분 crop 
+        currentFileName = str(file.title()).split('\\')[1]
+
+        # 얼굴부분 crop
         # haarcascade 불러오기
         face_cascade = cv2.CascadeClassifier(
             cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -125,12 +126,12 @@ with mp_face_mesh.FaceMesh(
         #print(coodinate_list)
 
         # cv2.imshow("Image_ESEntial",annotated_image)
-        if cv2.imwrite('./imageSet/processed_set/Heart/heart (10).jpg', annotated_image) == True:
-             print("successfully saved image!!")
+        if cv2.imwrite(SAVE_DIR+ currentFileName+'.jpg', annotated_image) == True:
+             print("successfully saved image!!" + currentFileName)
+        else : print("ERROR!!" + currentFileName)
 
-        #cv2.imwrite(os.path.join(SAVE_DIR, file), annotated_image)
 
         # esc 입력시 종료
-        key = cv2.waitKey(50000)
-        if key == 27:
-            break
+        # key = cv2.waitKey(50000)
+        # if key == 27:
+        #     break
