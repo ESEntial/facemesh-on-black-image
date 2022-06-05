@@ -8,10 +8,10 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_face_mesh = mp.solutions.face_mesh
 
+# IMAGE_FILES = glob.glob('./imageSet/training_set/Heart/*.jpg') # 처리 할 input 이미지
+# SAVE_DIR ='./imageSet/processed_set/Heart/' # 처리 된 이미지 저장 경로
 
-SAVE_DIR ='./imageSet/processed_set/Heart/'
 
-# 이미지 파일의 경우을 사용하세요.:
 #originImageFiles = glob.glob('./imageSet/training_set/Heart/')
 #IMAGE_FILES = originImageFiles
 IMAGE_FILES = ["./imageSet/training_set/Heart/heart (6).jpg"]
@@ -43,6 +43,7 @@ with mp_face_mesh.FaceMesh(
         refine_landmarks=True,
         min_detection_confidence=0.5) as face_mesh:
     for idx, file in enumerate(IMAGE_FILES):
+        pname = file
         # 얼굴부분 crop 
         # haarcascade 불러오기
         face_cascade = cv2.CascadeClassifier(
@@ -81,51 +82,53 @@ with mp_face_mesh.FaceMesh(
                 # .get_default_face_mesh_contours_style())
 
        # 랜드마크의 좌표 정보 확인
-        for i, idx in enumerate(oval) :
-                if idx == 109 :
-                        x_gap = face_landmarks.landmark[oval[i]].x - face_landmarks.landmark[oval[0]].x
-                        y_gap = face_landmarks.landmark[oval[i]].y - face_landmarks.landmark[oval[0]].y
-                        A = np.array([[y_gap/x_gap, -1], [-x_gap/y_gap, -1]])
-                        B = np.array([y_gap/x_gap*face_landmarks.landmark[oval[i]].x-face_landmarks.landmark[oval[i]].y, x_gap/y_gap*face_landmarks.landmark[5].x-face_landmarks.landmark[5].y])
-                        x,y = np.linalg.solve(A,B)
-                else :
-                        x_gap = face_landmarks.landmark[oval[i]].x - face_landmarks.landmark[oval[i+1]].x
-                        y_gap = face_landmarks.landmark[oval[i]].y - face_landmarks.landmark[oval[i+1]].y
-                        A = np.array([[y_gap/x_gap, -1], [-x_gap/y_gap, -1]])
-                        B = np.array([y_gap/x_gap*face_landmarks.landmark[oval[i]].x-face_landmarks.landmark[oval[i]].y, x_gap/y_gap*face_landmarks.landmark[5].x-face_landmarks.landmark[5].y])
-                        x,y = np.linalg.solve(A,B)
-                print(idx," : ",x, y)
+       #  for i, idx in enumerate(oval) :
+       #          if idx == 109 :
+       #                  x_gap = face_landmarks.landmark[oval[i]].x - face_landmarks.landmark[oval[0]].x
+       #                  y_gap = face_landmarks.landmark[oval[i]].y - face_landmarks.landmark[oval[0]].y
+       #                  A = np.array([[y_gap/x_gap, -1], [-x_gap/y_gap, -1]])
+       #                  B = np.array([y_gap/x_gap*face_landmarks.landmark[oval[i]].x-face_landmarks.landmark[oval[i]].y, x_gap/y_gap*face_landmarks.landmark[5].x-face_landmarks.landmark[5].y])
+       #                  x,y = np.linalg.solve(A,B)
+       #          else :
+       #                  x_gap = face_landmarks.landmark[oval[i]].x - face_landmarks.landmark[oval[i+1]].x
+       #                  y_gap = face_landmarks.landmark[oval[i]].y - face_landmarks.landmark[oval[i+1]].y
+       #                  A = np.array([[y_gap/x_gap, -1], [-x_gap/y_gap, -1]])
+       #                  B = np.array([y_gap/x_gap*face_landmarks.landmark[oval[i]].x-face_landmarks.landmark[oval[i]].y, x_gap/y_gap*face_landmarks.landmark[5].x-face_landmarks.landmark[5].y])
+       #                  x,y = np.linalg.solve(A,B)
+       #          print(idx," : ",x, y)
 
 
-        for id, lm in enumerate(face_landmarks.landmark):
-                ih, iw, ic = annotated_image.shape
-                x,y = int(lm.x*iw),int(lm.y*ih)
-                # print(id,x,y)
-                print(face_landmarks.landmark[id].x, face_landmarks.landmark[id].y, face_landmarks.landmark[id].z)
+        # for id, lm in enumerate(face_landmarks.landmark):
+        #         ih, iw, ic = annotated_image.shape
+        #         x,y = int(lm.x*iw),int(lm.y*ih)
+        #         # print(id,x,y)
+        #         print(face_landmarks.landmark[id].x, face_landmarks.landmark[id].y, face_landmarks.landmark[id].z)
+        #
+        #         # if id == 201 :
+        #         #         cv2.putText(annotated_image,str(id),(x,y),cv2.FONT_HERSHEY_PLAIN,0.5,(0,255,0),1)
+        #         # else :
+        #         #         cv2.putText(annotated_image,str(id),(x,y),cv2.FONT_HERSHEY_PLAIN,0.5,(0,0,0),1)
+        #         # if id == 94 :
+        #         #         cv2.putText(annotated_image,str(id),(x,y),cv2.FONT_HERSHEY_PLAIN,0.5,(0,255,0),1)
+        #         # if id == 46 :
+        #         #         cv2.putText(annotated_image,str(id),(x,y),cv2.FONT_HERSHEY_PLAIN,0.5,(0,255,0),1)
+        #         # if id == 276 :
+        #         #         cv2.putText(annotated_image,str(id),(x,y),cv2.FONT_HERSHEY_PLAIN,0.5,(0,255,0),1)
+        #
 
-                if id == 201 :
-                        cv2.putText(annotated_image,str(id),(x,y),cv2.FONT_HERSHEY_PLAIN,0.5,(0,255,0),1)
-                else :
-                        cv2.putText(annotated_image,str(id),(x,y),cv2.FONT_HERSHEY_PLAIN,0.5,(0,0,0),1)
-                if id == 94 :
-                        cv2.putText(annotated_image,str(id),(x,y),cv2.FONT_HERSHEY_PLAIN,0.5,(0,255,0),1)
-                if id == 46 :
-                        cv2.putText(annotated_image,str(id),(x,y),cv2.FONT_HERSHEY_PLAIN,0.5,(0,255,0),1)
-                if id == 276 :
-                        cv2.putText(annotated_image,str(id),(x,y),cv2.FONT_HERSHEY_PLAIN,0.5,(0,255,0),1)
-
-
-        coodinate_list = np.array([x_list, y_list, z_list])
-        #print(coodinate_list)
-
-        coodinate_list = coodinate_list.reshape((1, -1))
-        #print(coodinate_list)
-
-        coodinate_list = coodinate_list.reshape((3, -1))
+        # coodinate_list = np.array([x_list, y_list, z_list])
+        # #print(coodinate_list)
+        #
+        # coodinate_list = coodinate_list.reshape((1, -1))
+        # #print(coodinate_list)
+        #
+        # coodinate_list = coodinate_list.reshape((3, -1))
         #print(coodinate_list)
 
         # cv2.imshow("Image_ESEntial",annotated_image)
-        cv2.imwrite('./imageSet/processed_set/Heart/heart (6).jpg', annotated_image)
+        cv2.imwrite('./imageSet/processed_set/Heart/heart (9).jpg', annotated_image)
+        print("successfully saved image")
+        #cv2.imwrite(os.path.join(SAVE_DIR, pname), annotated_image)
         # esc 입력시 종료
         key = cv2.waitKey(50000)
         if key == 27:
