@@ -46,8 +46,8 @@ for type in setType:
     print("Processing "+type)
     for label in labels:
         print("Processing "+label)
-        IMAGE_FILES = glob.glob('./imageSet/testing_set/'+label+'/*.jpg')
-        SAVE_DIR ='./imageSet/processed_testing_set/'+label+'/'
+        IMAGE_FILES = glob.glob('./imageSet/'+type+'+_set/'+label+'/*.jpg')
+        SAVE_DIR ='./imageSet/processed_'+type+'_set/'+label+'/'
         # 표현되는 랜드마크의 굵기와 반경
         drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=2)
         mean = 0
