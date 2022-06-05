@@ -40,14 +40,16 @@ SAVE_DIR ='./imageSet/processed_testing_set/Round/'
 
 #IMAGE_FILES = ["./imageSet/training_set/Heart/heart (1).jpg"]
 
-labels = { 'Heart', 'Oblong', 'Oval', 'Round', 'Square' }
-setType = { 'testing', 'training' }
-for type in setType:
-    print("Processing "+type)
+labels = [ 'Heart', 'Oblong', 'Oval', 'Round', 'Square' ]
+setTypes = [ 'testing', 'training' ]
+for setType in setTypes:
+    print("Processing "+setType)
     for label in labels:
         print("Processing "+label)
-        IMAGE_FILES = glob.glob('./imageSet/'+type+'+_set/'+label+'/*.jpg')
-        SAVE_DIR ='./imageSet/processed_'+type+'_set/'+label+'/'
+        IMAGE_FILES = glob.glob('./imageSet/'+setType+'_set/'+label+'/*.jpg')
+        SAVE_DIR ='./imageSet/processed_'+setType+'_set/'+label+'/'
+        print(IMAGE_FILES)
+        print(SAVE_DIR)
         # 표현되는 랜드마크의 굵기와 반경
         drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=2)
         mean = 0
@@ -160,7 +162,7 @@ for type in setType:
                 #print(coodinate_list)
 
                 # cv2.imshow("Image_ESEntial",annotated_image)
-                if cv2.imwrite(SAVE_DIR+ currentFileName+'.jpg', annotated_image) == True:
+                if cv2.imwrite(SAVE_DIR+ currentFileName, annotated_image) == True:
                     print("successfully saved image!!" + currentFileName)
                 else : print("ERROR!!" + currentFileName)
                 
@@ -169,4 +171,4 @@ for type in setType:
                 # if key == 27:
                 #     break
         print("Done "+label)
-    print("Done "+type)
+    print("Done "+setType)
