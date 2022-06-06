@@ -8,17 +8,19 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_face_mesh = mp.solutions.face_mesh
 
+readErrorImageList = []
+saveErrorImageList = []
 labels = [ 'Heart', 'Oblong', 'Oval', 'Round', 'Square' ]
 setTypes = [ 'testing', 'training' ]
-labelIdx = 1
-typeIdx = 1
-imageNum = 724
+labelIdx = 0
+typeIdx = 0
+imageNum = 7
 
 imageName = labels[labelIdx].lower()+' ('+str(imageNum)+').jpg'
 print(imageName)
 IMAGE_FILES = glob.glob('./imageSet/'+setTypes[typeIdx]+'_set/'+labels[labelIdx]+'/'+imageName)
 SAVE_DIR ='./imageSet/one_image_testing/'
-        
+
 # 표현되는 랜드마크의 굵기와 반경
 drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=2)
 mean = 0
@@ -48,14 +50,19 @@ with mp_face_mesh.FaceMesh(
         min_detection_confidence=0.5) as face_mesh:
     for idx, file in enumerate(IMAGE_FILES):
         currentFileName = os.path.basename(file)
-
+        
         # 얼굴부분 crop
         # haarcascade 불러오기
         face_cascade = cv2.CascadeClassifier(
             cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-
+        print(face_cascade)
         # 이미지 불러오기
         image = cv2.imread(file)
+        print(2)
+        if image is None:
+            print("READ ERROR!!" + currentFileName)
+            readErrorImageList.append(currentFileName)
+            continue
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
         # 얼굴 찾기
@@ -85,4 +92,14 @@ with mp_face_mesh.FaceMesh(
 
         if cv2.imwrite(SAVE_DIR+ currentFileName, annotated_image) == True:
             print("successfully saved image!!" + currentFileName)
-        else : print("ERROR!!" + currentFileName)
+        else: 
+            print("SAVE ERROR!!" + currentFileName)
+            saveErrorImageList.append(currentFileName)
+
+# 오류 이미지들 이름 출력
+for idx, readErrorImage in enumerate(readErrorImageList):
+    print(idx, "Read Error Image: ", readErrorImage)
+    
+for idx, saveErrorImage in enumerate(saveErrorImageList):
+    print(idx, "Save Error Image: ", saveErrorImage)
+            
