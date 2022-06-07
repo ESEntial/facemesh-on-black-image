@@ -104,6 +104,6 @@ for setType in setTypes:
         ax.scatter(pos_x, pos_y, pos_z, c='r', marker='o', s=3)
         plt.scatter(pos_x, pos_y, pos_z)
         
-        # plt.show()  # 이미지 띄우기
-        plt.savefig(SAVE_DIR+currentFileName) # 이미지 저장
+        plt.show()  # 이미지 띄우기
+        # plt.savefig(SAVE_DIR+currentFileName) # 이미지 저장
         
