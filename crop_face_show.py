@@ -21,6 +21,7 @@ def makedirs(path):
 # 경로 설정 변수
 readErrorImageList = []
 saveErrorImageList = []
+noneFaceErrorImageList = []
 labels = [ 'Heart', 'Oblong', 'Oval', 'Round', 'Square' ]
 setTypes = [ 'testing', 'training' ]
 
@@ -35,7 +36,7 @@ for setType in setTypes:
     for label in labels:
         print("Processing "+label)
         IMAGE_DIR = './imageSet/'+setType+'_set/'+label+'/'
-        SAVE_DIR ='./imageSet/processed_'+setType+'_set/'+label+'/'
+        SAVE_DIR ='./imageSet/cropped'+setType+'_image/'+label+'/'
         makedirs(IMAGE_DIR)
         makedirs(SAVE_DIR)
         IMAGE_FILES = glob.glob(IMAGE_DIR+'*.jpg')
@@ -81,38 +82,22 @@ for setType in setTypes:
 
                 # 얼굴 crop
                 faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-                for (x, y, w, h) in faces:
-                    # cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
-                    cropped = image[y: round((y+h)*1.2), x: round((x+w)*1.2)]
-                    resize = cv2.resize(cropped, (512, 512), cv2.INTER_LANCZOS4)
-                image = resize
-                
-                # 작업 전에 BGR 이미지를 RGB로 변환합니다.
-                results = face_mesh.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
-
-                # 이미지에 출력하고 그 위에 얼굴 그물망 경계점을 그립니다.
-                if not results.multi_face_landmarks:
-                    continue
-                #annotated_image = image.copy()
-                annotated_image = np.zeros((512, 512, 3), np.uint8)
-                
-                
-                ih, iw, ic = annotated_image.shape
-                for face_landmarks in results.multi_face_landmarks:
-                    # 각 랜드마크를 image에 overlay 시켜줌
-                    mp_drawing.draw_landmarks(
-                        image=annotated_image,
-                        landmark_list=face_landmarks,
-                        connections=mp_face_mesh.FACEMESH_CONTOURS,
-                        landmark_drawing_spec=drawing_spec
-                    )
-
-                writeReturn = cv2.imwrite(SAVE_DIR+ currentFileName, annotated_image)
-                if writeReturn == True:
-                    print("successfully saved image!!" + currentFileName)
-                else: 
+                if len(faces) > 0:
+                    print(faces)
+                    color = (0, 0, 255)
+                    for face in faces:
+                        x,y,w,h = face
+                        cv2.rectangle(image, (x,y), (x+w, y+h), color, thickness=8)
+                        
+                    writeReturn = cv2.imwrite(SAVE_DIR+ currentFileName, image)
+                    if writeReturn == True:
+                        print("successfully saved image!!" + currentFileName)
+                    else: 
+                        print("SAVE ERROR!!" + currentFileName)
+                        saveErrorImageList.append(currentFileName)
+                else:
                     print("SAVE ERROR!!" + currentFileName)
-                    saveErrorImageList.append(currentFileName)
+                    noneFaceErrorImageList.append(currentFileName)
                 
         print("Done "+label)
     print("Done "+setType)
@@ -123,4 +108,5 @@ for idx, readErrorImage in enumerate(readErrorImageList):
 for idx, saveErrorImage in enumerate(saveErrorImageList):
     print(idx, "Save Error Image: ", saveErrorImage)
     
-
+for idx, noneFaceErrorImage in enumerate(noneFaceErrorImageList):
+    print(idx, "None Face Error Image: ", noneFaceErrorImage)

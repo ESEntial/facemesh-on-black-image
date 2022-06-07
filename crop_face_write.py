@@ -81,14 +81,25 @@ for setType in setTypes:
                 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
                 # 얼굴 crop
-                faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+                faces = face_cascade.detectMultiScale(gray, 1.1, 5)
+            
+                # crop한 이미지 중 사각형이 제일 큰 값만 추출
+                maxIdx = 0
+                for idx in range(len(faces)-1):
+                    (x1, y1, w1, h1) = faces[maxIdx]
+                    (x2, y2, w2, h2) = faces[idx+1]
+                    if (w1*h1 < w2*h2):
+                        maxIdx = idx+1
+                
+                # 이미지 저장
                 if len(faces) > 0:
-                    print(faces)
-                    color = (0, 0, 255)
-                    for face in faces:
-                        x,y,w,h = face
-                        cv2.rectangle(image, (x,y), (x+w, y+h), color, thickness=8)
-                        
+                    (x, y, w, h) = faces[maxIdx]
+                    # for (x, y, w, h) in faces:
+                        # cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
+                    cropped = image[round(y*0.9): round((y+h)*1.1), round(x*0.9): round((x+w)*1.1)]
+                    resize = cv2.resize(cropped, (512, 512), cv2.INTER_LANCZOS4)
+                    # image = resize    ## 크롭한 이미지 그대로
+                    image = cv2.cvtColor(resize, cv2.COLOR_BGR2GRAY)    ## 크롭한 이미지 흑백으로
                     writeReturn = cv2.imwrite(SAVE_DIR+ currentFileName, image)
                     if writeReturn == True:
                         print("successfully saved image!!" + currentFileName)
@@ -96,8 +107,10 @@ for setType in setTypes:
                         print("SAVE ERROR!!" + currentFileName)
                         saveErrorImageList.append(currentFileName)
                 else:
-                    print("SAVE ERROR!!" + currentFileName)
+                    print("NON FACE ERROR!!" + currentFileName)
                     noneFaceErrorImageList.append(currentFileName)
+                    continue
+
                 
         print("Done "+label)
     print("Done "+setType)
