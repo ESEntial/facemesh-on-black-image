@@ -8,8 +8,8 @@ import tensorflow as tf
 categories = [ 'Heart', 'Oblong', 'Oval', 'Round', 'Square' ]
 nb_classes = len(categories)
 # 이미지 크기 지정하기
-image_w = 64
-image_h = 64
+image_w = 512  
+image_h = 512
 
 # 데이터 불러오기 --- (※1)
 (X_train, X_test, y_train, y_test) = np.load("./imageSet/5obj.npy", allow_pickle=True)
@@ -21,14 +21,14 @@ print('X_train shape:', X_train.shape)
 # 모델 구축하기 --- (※2)
 model = Sequential()
 # 32: number of filters 
-model.add(Convolution2D(32, kernel_size=(3,3), padding='same', input_shape=X_train.shape[1:]))
+model.add(Convolution2D(256, kernel_size=(4,4), padding='same', input_shape=X_train.shape[1:]))
 model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.25))
 
-model.add(Convolution2D(32, 3, 3, padding='same'))
+model.add(Convolution2D(128, 2, 2, padding='same'))
 model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(1, 1)))
+model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.25))
 model.add(Convolution2D(32, 3, 3))
 model.add(MaxPooling2D(pool_size=(2, 2)))

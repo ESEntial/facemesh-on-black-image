@@ -10,8 +10,8 @@ categories = [ 'Heart', 'Oblong', 'Oval', 'Round', 'Square' ]
 nb_classes = len(categories)
 
 # 이미지 크기 지정 --- (※2)
-image_w = 64
-image_h = 64
+image_w = 512
+image_h = 512
 pixels = image_w * image_h * 3
 
 # 이미지 데이터 읽어 들이기 --- (※3)
